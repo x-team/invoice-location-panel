@@ -1,5 +1,9 @@
 import './styles';
-export { default as XteamerCard } from './components/xteamer/card';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './app';
 
 
-//code for injecting Panel into the play
+var element = window.mightyEl || document.body;
+
+ReactDOM.render(<App/>, element);
