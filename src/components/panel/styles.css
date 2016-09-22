@@ -1,0 +1,11 @@
+.wrapper {
+  margin: 10px;
+  max-width: 350px;
+  min-width: 300px;
+  marin: auto;
+}
+
+.card{
+  max-width: 350px;
+  min-width: 300px;
+}
