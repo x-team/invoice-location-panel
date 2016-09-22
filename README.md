@@ -1,4 +1,4 @@
-# X-team sdk
+# X-team invoice-geolocation-panel
 
 ### Installation and usage
 ### Developing
@@ -10,12 +10,7 @@ make init
 make build
 
 // to start a webpack dev server on localhost:8082
-// (it will expose examples dir)
 make dev
-
-// to publish changes to gh-pages branch
-// it is hooked up to x-team.github.io/x-sdk
-make docs
 
 // to run tests
 make test
