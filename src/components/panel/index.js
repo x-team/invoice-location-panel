@@ -4,8 +4,14 @@ import classNames from 'classnames';
 import GoogleLogin from 'react-google-login';
 import config from '../../config';
 import _ from 'lodash';
+import Immutable from 'immutable';
 
 //import {query} from 'x-query-client';
+
+class Location {
+  date = ''
+  location = ''
+};
 
 export default class Panel extends React.Component {
 
@@ -13,8 +19,9 @@ export default class Panel extends React.Component {
   }
 
   state = {
-    authorised: false,
-    saved: false
+    authorised: true,
+    saved: false,
+    locations: Immutable.List.of(new Location())
   }
 
   onAuthSuccess = googleUser => {
@@ -24,13 +31,9 @@ export default class Panel extends React.Component {
     });
   }
 
-  addNewRow(){
-    var rows = this.state.locations;
-    rows = rows.concatenate([{
-      date: '',
-      location: ''
-    }]);
-    this.setState('locations', rows);
+  addLocation = () => {
+    var locations = this.state.locations;
+    this.setState({locations: this.state.locations.push(new Location())});
   }
 
    saveToXmap(){
@@ -62,20 +65,20 @@ export default class Panel extends React.Component {
   }
 
 
-  removeRow(index){
-    var rows = this.state.locations;
-    rows = rows.without(index);
-    this.state('locations', rows);
+  removeRow = index => {
+    this.setState({locations: this.state.locations.splice(index, 1)});
   }
 
   renderLocationsTable() {
     return (
       <div>
         <table className="list-wrapper table">
-          {_.map(this.state.locations, this.renderTableRow)}
+          <tbody>
+          { this.state.locations.map(this.renderTableRow)}
+          </tbody>
         </table>
         <div className="add-row pull-right">
-          <button className="add-row-trigger btn btn-xs btn-primary ">Add another location</button>
+          <button className="add-row-trigger btn btn-xs btn-primary " onClick={this.addLocation}>Add another location</button>
           <button className="save-to-xmap-trigger btn btn-xs btn-success" onClick={this.saveToXmap}>Save to X-Map</button>
         </div>
       </div>
@@ -83,17 +86,17 @@ export default class Panel extends React.Component {
   }
 
 
-  renderTableRow(index=0) {
+  renderTableRow = (item, index=0) => {
     return(
     <tr className="list-row" key={index}>
-      <td key={0} className="calendar" style="width:105px;">
+      <td key={0} className="calendar" style={{width:105}}>
         <i className='icon-spinner icon-spin icon-large'></i>
         <input type="text" className="calendar" placeholder="When?" />
       </td>
-      <td key={1} className="location" style="width:auto;">
-        <input type="text" style="width:100%;" className="location" placeholder="Where? (google autocomplete baby)"/>
+      <td key={1} className="location" style={{width:'auto'}}>
+        <input type="text" style={{width:'100%'}} className="location" placeholder="Where? (google autocomplete baby)"/>
       </td>
-      <td key={2} className="remove" style="width:75px;">
+      <td key={2} className="remove" style={{width:175}}>
         <button className="btn btn-danger btn-xs remove-row" onClick={this.removeRow.bind(this, index)}>remove</button>
       </td>
     </tr>
