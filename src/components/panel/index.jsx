@@ -5,7 +5,7 @@ import GoogleLogin from 'react-google-login';
 import config from '../../config';
 import _ from 'lodash';
 import Immutable from 'immutable';
-
+import Row from '../row';
 //import {query} from 'x-query-client';
 
 class Location {
@@ -74,7 +74,13 @@ export default class Panel extends React.Component {
       <div>
         <table className="list-wrapper table">
           <tbody>
-          { this.state.locations.map(this.renderTableRow)}
+            {
+              this.state.locations.map((index, location) => {
+                return (
+                  <Row key={index} index={index} location={location} removeRow={this.removeRow}/>
+                );
+              })
+            }
           </tbody>
         </table>
         <div className="add-row pull-right">
@@ -83,24 +89,6 @@ export default class Panel extends React.Component {
         </div>
       </div>
     );
-  }
-
-
-  renderTableRow = (item, index=0) => {
-    return(
-    <tr className="list-row" key={index}>
-      <td key={0} className="calendar" style={{width:105}}>
-        <i className='icon-spinner icon-spin icon-large'></i>
-        <input type="text" className="calendar" placeholder="When?" />
-      </td>
-      <td key={1} className="location" style={{width:'auto'}}>
-        <input type="text" style={{width:'100%'}} className="location" placeholder="Where? (google autocomplete baby)"/>
-      </td>
-      <td key={2} className="remove" style={{width:175}}>
-        <button className="btn btn-danger btn-xs remove-row" onClick={this.removeRow.bind(this, index)}>remove</button>
-      </td>
-    </tr>
-    )
   }
 
   renderGoogleAuth(){

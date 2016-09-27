@@ -4,6 +4,15 @@ import ReactDOM from 'react-dom';
 import App from './app';
 
 
-var element = window.mightyEl || document.body;
+window.addEventListener('load',function(){
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src =  'https://maps.googleapis.com/maps/api/js?key=AIzaSyCPXoawrjAdZ6HBYtMVVjfWR96_pYwYr3A&libraries=places';
+  script.onload = init;
+  document.head.appendChild(script);
+});
 
-ReactDOM.render(<App/>, element);
+function init() {
+  var element = window.mightyEl || document.body;
+  ReactDOM.render(<App/>, element);
+}
