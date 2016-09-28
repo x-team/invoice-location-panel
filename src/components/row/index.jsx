@@ -1,11 +1,50 @@
 import React, { PropTypes } from 'react'
-import DatePicker from 'react-bootstrap-date-picker';
+  import DatePicker from 'react-bootstrap-date-picker';
 
 export default class Row extends React.Component {
 
-  state = {
-    search: ''
+  state= {
+    search : ''
   }
+
+  getLocation(){
+    var inputValue = this.refs.location.value;
+    var locationMeta = this.refs.location._autocomplete.getPlace();
+
+    if (!inputValue) {
+      return;
+    }
+
+    if(!locationMeta){
+
+      return {
+        address: inputValue,
+        location: {
+          lat: null,
+          lng: null
+        }
+      };
+
+    } else {
+
+      return {
+        address: locationMeta.formatted_address,
+        location: {
+          lat: locationMeta.geometry.location.lat(),
+          lng: locationMeta.geometry.location.lng()
+        }
+      }
+
+    }
+
+  }
+
+  getData(){
+    var location = this.getLocation();
+    var date = this.refs.calendar.state.value;
+    return location && date ? {location, date} : null;
+  }
+
 
   componentDidMount() {
     this.bindAutocompleteSinceThereIsNoGoodLibOutThere();
@@ -27,10 +66,10 @@ export default class Row extends React.Component {
   render () {
     let {search} = this.state;
     return(
-      <tr className="list-row" key={this.props.index}>
+      <tr className="list-row">
         <td key={0} className="calendar" style={{width:105}}>
           <i className='icon-spinner icon-spin icon-large'></i>
-          <DatePicker value={this.state.value} onChange={this.handleChange} />
+          <DatePicker ref="calendar" value={this.state.value} onChange={this.handleChange} />
         </td>
         <td key={1} className="location" style={{width:'auto'}}>
           <input ref="location" type="text" style={{width:'100%'}} className="location" placeholder="Where? (google autocomplete baby)"/>

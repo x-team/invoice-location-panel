@@ -4,9 +4,7 @@ import classNames from 'classnames';
 import GoogleLogin from 'react-google-login';
 import config from '../../config';
 import _ from 'lodash';
-import Immutable from 'immutable';
 import Row from '../row';
-//import {query} from 'x-query-client';
 
 class Location {
   date = ''
@@ -21,7 +19,7 @@ export default class Panel extends React.Component {
   state = {
     authorised: true,
     saved: false,
-    locations: Immutable.List.of(new Location())
+    rowNum: 1
   }
 
   onAuthSuccess = googleUser => {
@@ -31,15 +29,26 @@ export default class Panel extends React.Component {
     });
   }
 
-  addLocation = () => {
-    var locations = this.state.locations;
-    this.setState({locations: this.state.locations.push(new Location())});
+  addRow = () => {
+    this.setState({rowNum: this.state.rowNum + 1 });
   }
 
-   saveToXmap(){
 
-    var data = getParsedData();
+  getParsedData = () => {
+    var data = [];
+    var rowData;
+    for(var i = 0; i < this.state.rowNum; i++){
+      rowData = this.refs['row-'+i].getData();
+      if (rowData) {
+        data.push(rowData);
+      }
+    }
+    return data;
+  }
 
+   saveToXmap = () => {
+
+    var data = this.getParsedData();
     if(data.length){
 
       var opts = {
@@ -64,9 +73,17 @@ export default class Panel extends React.Component {
 
   }
 
+  renderRows() {
+    var rows = [];
+    for (var i = 0; i < this.state.rowNum; i++) {
+      rows.push(<Row ref={'row-' + i} key={i} index={i}  removeRow={this.removeRow}/>);
+    }
+    return rows;
+  }
+
 
   removeRow = index => {
-    this.setState({locations: this.state.locations.splice(index, 1)});
+    this.setState({rowNum: this.state.rowNum - 1});
   }
 
   renderLocationsTable() {
@@ -74,17 +91,11 @@ export default class Panel extends React.Component {
       <div>
         <table className="list-wrapper table">
           <tbody>
-            {
-              this.state.locations.map((index, location) => {
-                return (
-                  <Row key={index} index={index} location={location} removeRow={this.removeRow}/>
-                );
-              })
-            }
+            {this.renderRows()}
           </tbody>
         </table>
         <div className="add-row pull-right">
-          <button className="add-row-trigger btn btn-xs btn-primary " onClick={this.addLocation}>Add another location</button>
+          <button className="add-row-trigger btn btn-xs btn-primary " onClick={this.addRow}>Add another location</button>
           <button className="save-to-xmap-trigger btn btn-xs btn-success" onClick={this.saveToXmap}>Save to X-Map</button>
         </div>
       </div>
