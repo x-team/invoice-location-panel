@@ -13,6 +13,6 @@ window.addEventListener('load',function(){
 });
 
 function init() {
-  var element = window.mightyEl || document.body;
+  var element = document.getElementById(window.mightyEl) || document.body;
   ReactDOM.render(<App/>, element);
 }

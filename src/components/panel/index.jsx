@@ -1,13 +1,20 @@
 import React from 'react';
 import classNames from 'classnames';
 import GoogleLogin from 'react-google-login';
-import config from '../../config';
+import {graphqlServerURL, googleClientID}  from '../../config';
 import _ from 'lodash';
 import Row from '../row';
 
-class Location {
-  date = ''
-  location = ''
+const styles = {
+  wrapper: {
+    margin:'25px 0'
+  },
+  actionBtn: {
+    marginRight: 8
+  },
+  actionBtnsWrapper: {
+    overflow: 'hidden'
+  }
 };
 
 export default class Panel extends React.Component {
@@ -18,7 +25,8 @@ export default class Panel extends React.Component {
   state = {
     authorised: true,
     saved: false,
-    rowNum: 1
+    rowNum: 1,
+    processing: false
   }
 
   onAuthSuccess = googleUser => {
@@ -58,13 +66,24 @@ export default class Panel extends React.Component {
         method: 'post'
       };
 
+      this.setState({processing: true});
+
+
+      setTimeout(()=>{
+
+        fetch(graphqlServerURL+'/auth?auth_token='+this.state.authIDToken, opts)
+          .then(() => {
+            this.setState({saved: true});
+          })
+          .catch(() => {
+            this.setState({saved: true});
+
+          //  alert('sth went wrong :/')
+          })
+
+      }, 2000)
       //save here instead of auth
-      fetch(graphqlServerURL+'/auth?auth_token='+this.state.authIDToken, opts)
-        .then(() => {
-          this.setState('locations', []);
-          this.setState('saved', true);
-        })
-        .catch(function(){ alert('sth went wrong :/')})
+
 
     } else {
       alert('add at least one full row ;)')
@@ -86,6 +105,9 @@ export default class Panel extends React.Component {
   }
 
   renderLocationsTable() {
+
+
+    const saveBtnContent = this.state.processing ? 'Doing stuff ...' : 'Save to X-Map'
     return (
       <div>
         <table className="list-wrapper table">
@@ -93,9 +115,15 @@ export default class Panel extends React.Component {
             {this.renderRows()}
           </tbody>
         </table>
-        <div className="add-row pull-right">
-          <button className="add-row-trigger btn  btn-default btn-xs btn-primary " onClick={this.addRow}>Add another location</button>
-          <button className="save-to-xmap-trigger btn btn-xs btn-success" onClick={this.saveToXmap}>Save to X-Map</button>
+        <div style={styles.actionBtnsWrapper}>
+          <div className="add-row pull-right">
+            <button disabled={this.state.processing} style={styles.actionBtn} className="add-row-trigger btn  btn-default btn-xs btn-primary " onClick={this.addRow}>
+              Add another location
+            </button>
+            <button disabled={this.state.processing} style={styles.actionBtn} className="save-to-xmap-trigger btn btn-xs btn-success" onClick={this.saveToXmap}>
+              {saveBtnContent}
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -124,7 +152,7 @@ export default class Panel extends React.Component {
 
   render() {
     return (
-      <div>
+      <div style={styles.wrapper}>
         <h3>Have you traveled to a new place?<br/><small>Update your travels to X-Map. We will do some cool stuff with it!</small></h3>
         <div className="content">
           {

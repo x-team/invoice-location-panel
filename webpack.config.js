@@ -3,7 +3,14 @@ var HtmlWebpackPlugin  = require('html-webpack-plugin');
 
 var plugins = [];
 
-plugins.push(new HtmlWebpackPlugin());
+
+function isProduction(){
+  return process.env.NODE_ENV == 'PRODUCTION';
+}
+
+if (!isProduction()){
+  plugins.push(new HtmlWebpackPlugin());
+}
 
 
 module.exports = {
@@ -23,7 +30,7 @@ module.exports = {
       },
       {
         test: /\.jsx$/,
-        loaders: process.env.PRODUCTION ? ['babel'] : ['react-hot', 'babel'],
+        loaders: isProduction() ? ['babel'] : ['react-hot', 'babel'],
         exclude: /node_modules/
       },
       {

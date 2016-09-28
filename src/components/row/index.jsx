@@ -1,5 +1,29 @@
 import React, { PropTypes } from 'react'
-  import DatePicker from 'react-bootstrap-date-picker';
+import DatePicker from 'react-bootstrap-date-picker';
+
+
+const styles = {
+  calendarColumn: {
+    width:165
+  },
+  locationColumn: {
+    width: 'auto'
+  },
+  actionColumn: {
+    width: 50
+  },
+  noActionColumn: {
+    width: 0,
+    padding: 0
+  },
+  locationInput: {
+    width: '100%',
+    padding: 6,
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: '#ccc'
+  }
+};
 
 export default class Row extends React.Component {
 
@@ -72,20 +96,30 @@ export default class Row extends React.Component {
     this.setState({ search: suggestName, selectedCoordinate: coordinate })
   }
 
+  renderRemoveBtn = () => {
+    return (
+        <button className="btn btn-danger remove-row" onClick={this.props.removeRow.bind(this, this.props.index)}>X</button>
+    );
+  }
+
   render () {
     let {search} = this.state;
+    const actionColumnStyles = this.props.index > 0  ? styles.actionColumn : styles.noActionColumn;
     return(
       <tr className="list-row">
-        <td key={0} className="calendar" style={{width:105}}>
+        <td key={0} className="calendar" style={styles.calendarColumn}>
           <i className='icon-spinner icon-spin icon-large'></i>
           <DatePicker ref="calendar" value={this.state.date} onChange={this.handleDateChange} />
         </td>
-        <td key={1} className="location" style={{width:'auto'}}>
-          <input ref="location" type="text" style={{width:'100%'}} className="location" placeholder="Where? (google autocomplete baby)"/>
+        <td key={1} className="location" style={styles.locationColumn}>
+          <input ref="location" type="text" style={styles.locationInput} className="location" placeholder="Where? (google autocomplete baby)"/>
         </td>
-        <td key={2} className="remove" style={{width:175}}>
-          <button className="btn btn-danger btn-xs remove-row" onClick={this.props.removeRow.bind(this, this.props.index)}>remove</button>
+        <td key={2} className="remove" style={actionColumnStyles}>
+          {
+            this.props.index > 0 ? this.renderRemoveBtn() : null
+          }
         </td>
+
       </tr>
     )
   }

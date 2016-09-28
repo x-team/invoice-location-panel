@@ -1,5 +1,5 @@
 #!/bin/bash
-export $( cat .env|xargs)
+export $( cat .env-production|xargs)
 
 ./node_modules/.bin/webpack \
   --colors \
