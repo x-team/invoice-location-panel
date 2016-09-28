@@ -32,7 +32,15 @@ module.exports = {
       },
       {
         test: /\.(css|scss)$/,
-        loaders: ['style', 'css?sourceMap&modules&importLoaders=1','postcss','sass']
+        loaders: ['style','css','sass']
+      },
+      {
+         test: /\.(woff2?|svg)$/,
+         loader: 'url?limit=10000'
+      },
+      {
+        test: /\.(ttf|eot)$/,
+        loader: 'file'
       }
     ]
   },

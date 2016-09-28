@@ -24,6 +24,7 @@
     "css-loader": "^0.23.1",
     "eslint": "^3.2.2",
     "eslint-friendly-formatter": "^2.0.6",
+    "file-loader": "^0.9.0",
     "html-webpack-plugin": "^2.22.0",
     "isparta": "^4.0.0",
     "isparta-loader": "^2.0.0",
@@ -53,11 +54,13 @@
     "sinon": "^1.17.5",
     "sinon-chai": "^2.8.0",
     "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
     "classnames": "^2.2.5",
+    "css-loader": "^0.23.1",
     "history": "^2.0.1",
     "immutable": "^3.8.1",
     "react": "^15.3.0",

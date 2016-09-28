@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './styles';
 import classNames from 'classnames';
 import GoogleLogin from 'react-google-login';
 import config from '../../config';
@@ -95,7 +94,7 @@ export default class Panel extends React.Component {
           </tbody>
         </table>
         <div className="add-row pull-right">
-          <button className="add-row-trigger btn btn-xs btn-primary " onClick={this.addRow}>Add another location</button>
+          <button className="add-row-trigger btn  btn-default btn-xs btn-primary " onClick={this.addRow}>Add another location</button>
           <button className="save-to-xmap-trigger btn btn-xs btn-success" onClick={this.saveToXmap}>Save to X-Map</button>
         </div>
       </div>
@@ -125,7 +124,7 @@ export default class Panel extends React.Component {
 
   render() {
     return (
-      <div className={styles.geolocationPanelWrapper}>
+      <div>
         <h3>Have you traveled to a new place?<br/><small>Update your travels to X-Map. We will do some cool stuff with it!</small></h3>
         <div className="content">
           {

@@ -1,7 +1,7 @@
 import React from 'react';
 import Panel from './components/panel';
-import styles from './styles';
 import classNames from 'classnames';
+import './styles/bootstrap.min.css';
 
 export default class App extends React.Component {
 

@@ -4,7 +4,15 @@ import React, { PropTypes } from 'react'
 export default class Row extends React.Component {
 
   state= {
+    date : '',
     search : ''
+  }
+
+
+  handleDateChange = (date) => {
+    this.setState({
+      date
+    });
   }
 
   getLocation(){
@@ -55,11 +63,12 @@ export default class Row extends React.Component {
     input._autocomplete = new window.google.maps.places.Autocomplete(input);
   }
 
+
   handleSearchChange = (e) => {
     this.setState({ search: e.target.value })
   }
 
-  handleSelectSuggest = (suggestName, coordinate) => {
+  handleSelectSuggest = (searchTerm, coordinate) => {
     this.setState({ search: suggestName, selectedCoordinate: coordinate })
   }
 
@@ -69,7 +78,7 @@ export default class Row extends React.Component {
       <tr className="list-row">
         <td key={0} className="calendar" style={{width:105}}>
           <i className='icon-spinner icon-spin icon-large'></i>
-          <DatePicker ref="calendar" value={this.state.value} onChange={this.handleChange} />
+          <DatePicker ref="calendar" value={this.state.date} onChange={this.handleDateChange} />
         </td>
         <td key={1} className="location" style={{width:'auto'}}>
           <input ref="location" type="text" style={{width:'100%'}} className="location" placeholder="Where? (google autocomplete baby)"/>
